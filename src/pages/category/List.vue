@@ -10,10 +10,8 @@
             <el-table-column label="父栏目" prop="parentId"></el-table-column>
             <el-table-column label="操作">
                 <template v-slot="slot">
-               {{slot.row.id}}
                <a href="" @click.prevent="deleteHandler(slot.row.id)">删除</a>
                <a href="" @click.prevent="updataHandler(slot.row)">修改</a>
-               <a href="" @click.prevent="">详情</a>
                 </template>
             </el-table-column>
 
@@ -66,6 +64,9 @@ export default {
             this.loadData();
         },
         toAddHandler(){
+            this.form = {
+        
+      }  
             this.title='录入产品信息',
             this.visible=true;
 
