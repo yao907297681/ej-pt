@@ -1,6 +1,7 @@
 <template>
     <div>
         <h5>评论管理</h5>
+        <div>{{todayDate}}</div>
         <el-button type="primary" @click="toAddHandler">点击评论</el-button>
         <el-button type="warning">批量删除</el-button>
         <el-table :data="comment">
@@ -142,7 +143,7 @@ export default {
     //方法结束
         },
         created(){
-            setInterval(this.nowTime, 100000000);
+            setInterval(this.nowTime, 1000);
             this.loadData()
 
         }
