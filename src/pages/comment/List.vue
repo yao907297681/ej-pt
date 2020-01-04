@@ -63,14 +63,15 @@ export default {
         })
         },
         toAddHandler(){
+            this.form = {
+       
+      }
             this.title='记录评论信息',
             this.visible=true;
 
         },
         submitHandler(){
-            this.form.commentTime=this.todayDate
             let url = 'http://localhost:6677/comment/saveOrUpdate'
-            
             request({
              url,
                method:"POST",

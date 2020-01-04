@@ -64,6 +64,9 @@ export default {
             this.loadData();
         },
         toAddHandler(){
+            this.form = {
+        
+      }  
             this.title='录入产品信息',
             this.visible=true;
 
