@@ -25,6 +25,11 @@
         <el-form-item label="序号">
           <el-input v-model="form.num" />
         </el-form-item>
+        <el-form-item label="父栏目">
+                 <el-select v-model="form.categoryId">
+                     <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                 </el-select>
+          </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
          <el-button type="primary" @click="submitHandler" size="small">确 定</el-button>
@@ -44,7 +49,8 @@ export default {
             visible:false,
             title:'栏目管理',
             category:[],
-            form:[]
+            form:[],
+            options:{}
 
         }
     },
@@ -56,6 +62,14 @@ export default {
             this.category=response.data
 
         })
+        },
+        loadFu(){
+           let url= 'http://localhost:6677/product/findAll'
+        request.get(url).then((response)=>{
+            this.options=response.data
+
+        })
+
         },
         updataHandler(row){
             this.visible=true;
@@ -116,7 +130,8 @@ export default {
       },
 
      created(){
-            this.loadData()
+            this.loadData(),
+            this.loadFu()
 
         }
     

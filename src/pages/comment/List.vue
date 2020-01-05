@@ -26,9 +26,14 @@
         <!-- <el-form-item label="时间">
           <el-input v-model="form.commentTime" />
         </el-form-item> -->
-        <el-form-item label="订单编号">
+        <!-- <el-form-item label="订单编号">
           <el-input v-model="form.orderId" />
-        </el-form-item>
+        </el-form-item> -->
+        <el-form-item label="订单编号">
+                 <el-select v-model="form.orderId">
+                     <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                 </el-select>
+             </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
          <el-button type="primary" @click="submitHandler" size="small">确 定</el-button>
@@ -50,6 +55,7 @@ export default {
             comment:[],
             form:[],
             todayDate: "",
+            options:{}
 
         }
     },
@@ -68,6 +74,13 @@ export default {
       }
             this.title='记录评论信息',
             this.visible=true;
+
+        },
+        loadOrder(){
+            let url="http://localhost:6677/order/findAll"
+            request.get(url).then((response)=>{
+            this.options=response.data;
+        })
 
         },
         submitHandler(){
@@ -145,7 +158,8 @@ export default {
         },
         created(){
             setInterval(this.nowTime, 1000);
-            this.loadData()
+            this.loadData(),
+            this.loadOrder()
 
         }
     

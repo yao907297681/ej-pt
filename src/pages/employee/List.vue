@@ -108,7 +108,7 @@ export default {
              //模态框关闭
              this.closerModalHandler();
              //刷新 
-             this.loadDate();
+             this.loadData();
              //提示消息
              this.$message({
                 type:"success",
@@ -118,7 +118,7 @@ export default {
         },
         AddHandler(){
             this.form={
-                type:"customer"
+                type:"employee"
             };
             this.title="录入员工信息";
             this.visible=true;

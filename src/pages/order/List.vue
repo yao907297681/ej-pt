@@ -4,15 +4,15 @@
         <el-button type="primary" size="small" @click="toAddHandler">添加</el-button>
         <el-button type="success" size="small">批量删除</el-button>
          <!-- 表格 -->
-        <el-table :data="orders">
-            <el-table-column prop="id" label="订单编号"></el-table-column>
+        <el-table :data="order.list">
+            <el-table-column fixed="left" prop="id" label="订单编号"></el-table-column>
             <el-table-column prop="orderTime" label="订单时间"></el-table-column>
             <el-table-column prop="total" label="订单数量"></el-table-column>
             <el-table-column prop="status" label="订单状态"></el-table-column>
             <el-table-column prop="customerId" label="顾客编号"></el-table-column>
             <el-table-column prop="waiterId" label="员工编号"></el-table-column>
             <el-table-column prop="addressId" label="地址编号"></el-table-column>
-            <el-table-column label="操作">
+            <el-table-column fixed="right" label="操作">
                 <template v-slot="slot">
                     <a href="" @click.prevent="toDeleteHandler(slot.row.id)">删除</a>
                     <a href="" @click.prevent="toUpdateHandler(slot.row)">修改</a>
@@ -20,6 +20,12 @@
             </el-table-column>  
         </el-table>
         <!-- 表格结束 -->
+
+         <el-pagination
+         layout="prev, pager, next"
+        :total="order.total"
+        @current-change="pageChageHandler">
+       </el-pagination>
         <!-- 模态框 -->
         <el-dialog
             :title="title"
@@ -62,11 +68,21 @@ export default {
     //用于存放网页中需要调用的方法
     methods:{
         loadData(){
-            let url = "http://localhost:6677/order/findAll";
-            request.get(url).then((response)=>{
-            //将查询结果设置到orders中，箭头函数中的this指向外部函数实例
-            this.orders = response.data;
-        })
+            let url = "http://localhost:6677/order/queryPage";
+            request({
+                url,
+                method:'post',
+                headers:{
+                    "Content-Type":"application/x-www-form-urlencoded"
+                },
+                data:querystring.stringify(this.params)
+            }).then((response)=>{
+                this.order = response.data;
+            })
+        },
+        pageChageHandler(page){
+            this.params.page = page-1;
+            this.loadData();
         },
         submitHandler(){
             //this.form 对象---字符串--> 后台
@@ -97,7 +113,7 @@ export default {
         toAddHandler(){
             //将form变为初始值
             this.form={
-                type:"orders"
+                type:"order"
             }
             this.title="录入订单信息";
             this.visible=true;
@@ -144,9 +160,13 @@ export default {
         return{
             //title:"录入订单信息",
             visible:false,
-            orders:[],
+            order:{},
             form:{
-                type:"order"
+                
+            },
+            params:{
+                page:0,
+                pageSize:10
             }
         }
     },

@@ -53,7 +53,9 @@
                  <el-input v-model="form.photo"></el-input>
              </el-form-item>
              <el-form-item label="栏目">
-                 <el-input v-model="form.categoryId"></el-input>
+                 <el-select v-model="form.categoryId">
+                     <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                 </el-select>
              </el-form-item>
             
          </el-form>
@@ -134,6 +136,13 @@ export default {
             };
             this.visible=true;
         },
+        loadCategory(){
+            let url="http://localhost:6677/category/findAll"
+            request.get(url).then((response)=>{
+            this.options=response.data;
+        })
+
+        },
         
         closeModalHander(){
             this.visible=false;
@@ -144,7 +153,8 @@ export default {
         return{
             visible:false,
             products:[],
-            form:{}
+            form:{},
+            options:{}
 
         }
     },
@@ -152,6 +162,7 @@ export default {
         //this为当前vue实例对象
         //vue实例创建完毕
         this.loadData();
+        this.loadCategory();
         
     }
 }
