@@ -36,9 +36,6 @@
          width="60%">
          ---{{form}}
          <el-form :model="form" label-width="80px">
-             <el-form-item label="编号">
-                 <el-input v-model="form.id"></el-input>
-             </el-form-item>
              <el-form-item label="产品名称">
                  <el-input v-model="form.name" ></el-input>
              </el-form-item>
@@ -61,7 +58,7 @@
              <el-form-item label="图片" >
                 <el-upload
                         class="upload-demo"
-                        action="https://134.175.154.93:6677//file/upload"
+                        action="http://134.175.154.93:6677//file/upload"
                         :on-success="uploadSuccessHandler"
                         :file-list="fileList"
                         list-type="picture">
@@ -86,9 +83,9 @@ import querystring from 'querystring'
 export default {
     //用于存放网页中用于调用的方法
     methods:{
-        uploadSuccessHandler(){
-            console.log(response);
-            let photo="https://134.175.154.93:8888/group1/"+response.data.id;
+        uploadSuccessHandler(response){
+            console.log(response.data.id);
+            let photo="http://134.175.154.93:8888/group1/"+response.data.id;
             this.form.photo=photo;
         
         },
@@ -106,7 +103,6 @@ export default {
         })
         },
         submitHandler(){
-    
             //通过request与后台进行交互，并且携带参数
              let url="http://localhost:6677/product/saveOrUpdate"
              request({
@@ -171,7 +167,7 @@ export default {
             products:[],
             options:[],
             form:{},
-            filelist:[]
+            fileList:[]
 
         }
     },
@@ -183,7 +179,5 @@ export default {
     }
 }
 </script>
-
 <style scoped>
-
 </style>
