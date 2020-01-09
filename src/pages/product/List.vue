@@ -7,12 +7,16 @@
         <!--表格-->
         <el-table :data="products">
             <el-table-column label="编号" prop="id"  fixed="left"> </el-table-column>
-            <el-table-column label="清洁件名称" prop="name"  fixed="left"> </el-table-column>
-            <el-table-column label="描述" prop="description" width="200"> </el-table-column>
-            <el-table-column label="价格" prop="price" fixed="left"> </el-table-column>
-            <el-table-column label="状态" prop="status" > </el-table-column>
-            <el-table-column label="图片" prop="photo"> </el-table-column>
-            <el-table-column label="栏目" prop="categoryId"> </el-table-column>
+            <el-table-column label="产品名称" prop="name"   fixed="left"> </el-table-column>
+            <el-table-column label="描述" prop="description" > </el-table-column>
+            <el-table-column label="单价" prop="price" fixed="left"> </el-table-column>
+            <el-table-column label="产品图片">
+                <template slot-scope="scope">
+                <img :src="scope.row.photo" width="200" height="200">
+                </template>
+            </el-table-column> 
+
+            <el-table-column label="所属栏目" prop="categoryId"> </el-table-column>
             <el-table-column label="操作" fixed="right" > 
              
                 <template v-slot="slot">
@@ -29,37 +33,45 @@
        </el-pagination>
        <!--/分页-->
        <!--模式框-->
+       <!--https://134.175.154.93:8888/group1/上传图片获取地址  -->
+
        <el-dialog
          :title="title"
          :visible.sync="visible"
          width="60%">
+         ---{{form}}
          <el-form :model="form" label-width="80px">
-             <el-form-item label="编号">
-                 <el-input v-model="form.id"></el-input>
-             </el-form-item>
-             <el-form-item label="清洁件名称">
+             <el-form-item label="产品名称">
                  <el-input v-model="form.name" ></el-input>
              </el-form-item>
-             <el-form-item label="描述">
-                 <el-input v-model="form.description"></el-input>
-             </el-form-item>
-             <el-form-item label="价格">
+             <el-form-item label="单价">
                  <el-input v-model="form.price"></el-input>
              </el-form-item>
-             <el-form-item label="状态">
-                 <el-input v-model="form.status"></el-input>
+             <el-form-item label="所属栏目">
+                  <el-select v-model="form.categoryId"  >
+                        <el-option
+                        v-for="item in options"
+                        :key="item.id"
+                        :label="item.name"
+                        :value="item.id">
+                        </el-option>
+                    </el-select>  
              </el-form-item>
-             <el-form-item label="图片">
-                 <el-input v-model="form.photo"></el-input>
+            <el-form-item label="描述" >
+                 <el-input v-model="form.description" type="textarea"></el-input>
              </el-form-item>
-             <el-form-item label="栏目">
-                 <el-select v-model="form.categoryId">
-                     <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                 </el-select>
+             <el-form-item label="图片" >
+                <el-upload
+                        class="upload-demo"
+                        action="https://134.175.154.93:6677//file/upload"
+                        :on-success="uploadSuccessHandler"
+                        :file-list="fileList"
+                        list-type="picture">
+                        <el-button size="small" type="primary">点击上传</el-button>
+                        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                </el-upload>
              </el-form-item>
-            
          </el-form>
-           ---{{form}}
          <span slot="footer" class="dialog-footer">
          <el-button @click="closeModalHander" size="small">取 消</el-button>
          <el-button type="primary" @click="submitHandler" size="small">确 定</el-button>
@@ -76,6 +88,19 @@ import querystring from 'querystring'
 export default {
     //用于存放网页中用于调用的方法
     methods:{
+        uploadSuccessHandler(){
+            console.log(response);
+            let photo="https://134.175.154.93:8888/group1/"+response.data.id;
+            this.form.photo=photo;
+        
+        },
+            loadCategory(){
+      let url = "http://localhost:6677/category/findAll"
+      request.get(url).then((response)=>{
+        // 将查询结果设置到products中，this指向外部函数的this
+        this.options = response.data;
+      })
+    },
         loadData(){
             let url="http://localhost:6677/product/findAll"
             request.get(url).then((response)=>{
@@ -132,16 +157,9 @@ export default {
         toAddHandler(){
           this.title="添加产品信息"
             this.form={
-                type:"product"
+               
             };
             this.visible=true;
-        },
-        loadCategory(){
-            let url="http://localhost:6677/category/findAll"
-            request.get(url).then((response)=>{
-            this.options=response.data;
-        })
-
         },
         
         closeModalHander(){
@@ -153,9 +171,10 @@ export default {
         return{
             visible:false,
             products:[],
+            options:[],
             form:{},
-            options:{}
-
+            filelist:[],
+            title:'产品'
         }
     },
     created(){
@@ -163,11 +182,9 @@ export default {
         //vue实例创建完毕
         this.loadData();
         this.loadCategory();
-        
     }
 }
 </script>
 
 <style scoped>
-
 </style>
