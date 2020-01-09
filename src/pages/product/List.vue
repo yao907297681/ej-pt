@@ -167,8 +167,12 @@ export default {
             products:[],
             options:[],
             form:{},
+<<<<<<< HEAD
             fileList:[]
 
+=======
+            filelist:[]
+>>>>>>> 0661ad77bce75219cbb38a232cccec9efcaecc71
         }
     },
     created(){
