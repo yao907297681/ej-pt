@@ -1,3 +1,35 @@
+
+Skip to content
+Pull requests
+Issues
+Marketplace
+Explore
+@yao907297681
+Learn Git and GitHub without any code!
+
+Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
+yao907297681 /
+ej-pt
+
+1
+0
+
+    0
+
+Code
+Issues 0
+Pull requests 0
+Actions
+Projects 0
+Wiki
+Security
+Insights
+Settings
+ej-pt/src/pages/product/List.vue
+@Jpray1988 Jpray1988 产品管理（上传图片） bcd2a6c 3 days ago
+@yao907297681
+@Jpray1988
+189 lines (176 sloc) 6.36 KB
 <template>
     <div>
         <!--按钮-->
@@ -10,12 +42,7 @@
             <el-table-column label="产品名称" prop="name"   fixed="left"> </el-table-column>
             <el-table-column label="描述" prop="description" > </el-table-column>
             <el-table-column label="单价" prop="price" fixed="left"> </el-table-column>
-            <el-table-column label="产品图片">
-                <template slot-scope="scope">
-                <img :src="scope.row.photo" width="200" height="200">
-                </template>
-            </el-table-column> 
-
+            <el-table-column label="图片" prop="photo" width="600px"> </el-table-column>
             <el-table-column label="所属栏目" prop="categoryId"> </el-table-column>
             <el-table-column label="操作" fixed="right" > 
              
@@ -41,6 +68,9 @@
          width="60%">
          ---{{form}}
          <el-form :model="form" label-width="80px">
+             <el-form-item label="编号">
+                 <el-input v-model="form.id"></el-input>
+             </el-form-item>
              <el-form-item label="产品名称">
                  <el-input v-model="form.name" ></el-input>
              </el-form-item>
@@ -173,8 +203,7 @@ export default {
             products:[],
             options:[],
             form:{},
-            filelist:[],
-            title:'产品'
+            filelist:[]
         }
     },
     created(){
